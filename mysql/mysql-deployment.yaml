@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    spec:
+      containers:
+        - env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+          image: mariadb:10.11.2
+          name: mysql
+          ports:
+            - containerPort: 3306
+          resources: {}
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: docker-initdb
+            - mountPath: /etc/mysql/conf.d
+              name: mysql-conf
+            - mountPath: /etc/slurm/slurmdbd.conf
+              name: slurmdbd-conf
+      hostname: mysql
+      restartPolicy: Always
+      volumes:
+        - name: docker-initdb
+          hostPath:
+            path: /opt/keys/k8hpc/database
+        - name: mysql-conf
+          hostPath:
+            path: /opt/keys/k8hpc/database
+        - name: slurmdbd-conf
+          hostPath:
+            path: /opt/keys/k8hpc/slurm/slurmdbd.conf
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  type: ClusterIP
+  ports:
+    - name: "3306"
+      port: 3306
+      targetPort: 3306
+status:
+  loadBalancer: {}
