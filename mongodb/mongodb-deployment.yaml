@@ -35,3 +35,18 @@ spec:
           hostPath:
             path: /opt/keys/k8hpc/data_db
 status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  type: ClusterIP
+  ports:
+    - name: "27017"
+      port: 27017
+      targetPort: 27017
+status:
+  loadBalancer: {}
