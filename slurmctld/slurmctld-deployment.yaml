@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slurmctld
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: slurmctld
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    spec:
+      containers:
+        - args:
+            - slurmctld
+          image: ubccr/hpcts:slurm-2022.07
+          name: slurmctld
+          ports:
+            - containerPort: 22
+            - containerPort: 6817
+          resources: {}
+      hostname: slurmctld
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: slurmctld
+spec:
+  ports:
+    - name: "22"
+      port: 22
+      targetPort: 22
+    - name: "6817"
+      port: 6817
+      targetPort: 6817
+status:
+  loadBalancer: {}
