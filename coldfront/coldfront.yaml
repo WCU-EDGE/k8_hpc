@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coldfront
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    spec:
+      containers:
+        - args:
+            - serve
+          image: ubccr/hpcts:coldfront-2022.07
+          name: coldfront
+          ports:
+            - containerPort: 443
+              hostIP: 10.102.0.2
+            - containerPort: 22
+          resources: {}
+      hostname: coldfront
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: coldfront
+spec:
+  ports:
+    - name: "2443"
+      port: 2443
+      targetPort: 443
+    - name: "22"
+      port: 22
+      targetPort: 22
+status:
+  loadBalancer: {}
