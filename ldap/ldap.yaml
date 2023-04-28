@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ldap
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    spec:
+      enableServiceLinks: false
+      containers:
+        - env:
+            - name: CONTAINER_LOG_LEVEL
+              value: debug
+            - name: LDAP_REMOVE_CONFIG_AFTER_SETUP
+              value: "false"
+            - name: LDAP_RFC2307BIS_SCHEMA
+              value: "true"
+            - name: LDAP_TLS_VERIFY_CLIENT
+              value: never
+          image: ubccr/hpcts:ldap-2022.07
+          name: ldap
+          resources: {}
+      hostname: ldap
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ldap
+spec:
+  type: ClusterIP
+  ports:
+    - name: "636"
+      port: 636
+      targetPort: 636
+    - name: "389"
+      port: 389
+      targetPort: 389
+status:
+  loadBalancer: {}
