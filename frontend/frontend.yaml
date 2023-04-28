@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    spec:
+      containers:
+        - args:
+            - frontend
+          image: ubccr/hpcts:slurm-2022.07
+          name: frontend
+          ports:
+            - containerPort: 22
+              hostIP: 127.0.0.1
+          volumeMounts:
+          - name: nfs-home
+            mountPath: /opt/home
+          resources: {}
+      volumes:
+      - name: nfs-home
+        nfs:
+          server: "10.244.7.4"
+          path: "/"
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  ports:
+    - name: "sshfrontend"
+      port: 22
+      targetPort: 22
+      nodePort: 30022
+status:
+  loadBalancer: {}
