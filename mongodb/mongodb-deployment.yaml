@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    spec:
+      containers:
+        - env:
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: hBbeOfpFLfFT5ZO
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: admin
+          image: mongo:4.4.19
+          name: mongodb
+          ports:
+            - containerPort: 27017
+          resources: {}
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: mongodb-claim0
+            - mountPath: /data/db
+              name: data-db
+      hostname: mongodb
+      restartPolicy: Always
+      volumes:
+        - name: mongodb-claim0
+          hostPath:
+            path: /opt/keys/k8hpc/data_db
+        - name: data-db
+          hostPath:
+            path: /opt/keys/k8hpc/data_db
+status: {}
