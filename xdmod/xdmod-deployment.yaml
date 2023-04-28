@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xdmod
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    spec:
+      containers:
+        - args:
+            - serve
+          image: ubccr/hpcts:xdmod-2022.07
+          name: xdmod
+          ports:
+            - containerPort: 443
+              hostIP: 127.0.0.1
+            - containerPort: 22
+          resources: {}
+      hostname: xdmod
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: xdmod
+spec:
+  ports:
+    - name: "4443"
+      port: 4443
+      targetPort: 443
+    - name: "22"
+      port: 22
+      targetPort: 22
+  selector:
+    io.kompose.service: xdmod
+status:
+  loadBalancer: {}
