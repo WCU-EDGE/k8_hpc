@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpn02
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cpn02
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    spec:
+      containers:
+        - args:
+            - slurmd
+          image: ubccr/hpcts:slurm-2022.07
+          name: cpn02
+          ports:
+            - containerPort: 22
+            - containerPort: 6818
+          resources: {}
+      hostname: cpn02
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpn02
+spec:
+  type: ClusterIP
+  ports:
+    - name: "22"
+      port: 22
+      targetPort: 22
+    - name: "6818"
+      port: 6818
+      targetPort: 6818
+  selector:
+    io.kompose.service: cpn02
+status:
+  loadBalancer: {}
