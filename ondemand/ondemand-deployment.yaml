@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ondemand
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    spec:
+      containers:
+        - args:
+            - serve
+          image: mikec1233/k8hpc:ondemand-2023.04
+          name: ondemand
+          ports:
+            - containerPort: 3443
+              hostIP: 127.0.0.1
+            - containerPort: 5554
+              hostIP: 127.0.0.1
+            - containerPort: 22
+          resources: {}
+      hostname: ondemand
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ondemand
+spec:
+  ports:
+    - name: "3443"
+      port: 3443
+      targetPort: 3443
+    - name: "5554"
+      port: 5554
+      targetPort: 5554
+    - name: "22"
+      port: 22
+      targetPort: 22
+status:
+  loadBalancer: {}
