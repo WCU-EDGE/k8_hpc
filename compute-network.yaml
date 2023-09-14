@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: k8hpc-compute
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.network/k8hpc-compute: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/k8hpc-compute: "true"
