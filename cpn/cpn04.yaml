@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cpn04
+  name: cpn04
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cpn04
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8hpc-compute: "true"
+        io.kompose.service: cpn04
+    spec:
+      containers:
+        - args:
+            - slurmd
+          image: ubccr/hpcts:slurm-2022.07
+          name: cpn04
+          ports:
+            - containerPort: 22
+            - containerPort: 6818
+          resources: {}
+      hostname: cpn04
+      restartPolicy: Always
+status: {}
+
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cpn04
+  name: cpn04
+spec:
+  type: ClusterIP
+  ports:
+    - name: "22"
+      port: 22
+      targetPort: 22
+    - name: "6818"
+      port: 6818
+      targetPort: 6818
+  selector:
+    io.kompose.service: cpn04
+status:
+  loadBalancer: {}
