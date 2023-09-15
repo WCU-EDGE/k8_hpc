@@ -4,10 +4,15 @@ metadata:
   name: xdmod
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: xdmod
   strategy:
     type: Recreate
   template:
     metadata:
+      labels:
+        app: xdmod
     spec:
       containers:
         - args:

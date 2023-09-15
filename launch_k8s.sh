@@ -115,8 +115,23 @@ case "$1" in
   'slurmdbd')
     slurmdbd
     ;;
+  'slurmctld')
+    slurmctld
+    ;;
+  'compute')
+    compute 
+    ;;
   'frontend')
     frontend
+    ;;
+  'coldfront')
+    coldfront 
+    ;;
+  'ondemand')
+    ondemand 
+    ;;
+  'xdmod')
+    xdmod 
     ;;
   'ingress')
     ingress

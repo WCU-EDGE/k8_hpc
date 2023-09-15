@@ -11,6 +11,8 @@ spec:
     type: Recreate
   template:
     metadata:
+      labels:
+        io.kompose.service: frontend
     spec:
       containers:
         - args:

@@ -5,7 +5,13 @@ metadata:
 spec:
   replicas: 1
   strategy: {}
+  selector:
+    matchLabels:
+      app: ldap
   template:
+    metadata:
+      labels:                   
+        app: ldap
     spec:
       enableServiceLinks: false
       containers:
@@ -24,7 +30,6 @@ spec:
       hostname: ldap
       restartPolicy: Always
 status: {}
-
 ---
 
 apiVersion: v1
@@ -42,3 +47,4 @@ spec:
       targetPort: 389
 status:
   loadBalancer: {}
+

@@ -6,8 +6,13 @@ spec:
   replicas: 1
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      app: mysql
   template:
     metadata:
+      labels:                   
+        app: mysql
     spec:
       containers:
         - env:

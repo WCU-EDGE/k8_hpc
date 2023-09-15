@@ -11,6 +11,8 @@ spec:
     type: Recreate
   template:
     metadata:
+      labels:
+        io.kompose.service: slurmdbd
     spec:
       containers:
         - args:
@@ -24,7 +26,6 @@ spec:
       hostname: slurmdbd
       restartPolicy: Always
 status: {}
-
 ---
 
 apiVersion: v1

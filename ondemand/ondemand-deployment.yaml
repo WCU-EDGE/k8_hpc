@@ -4,10 +4,15 @@ metadata:
   name: ondemand
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: ondemand
   strategy:
     type: Recreate
   template:
     metadata:
+      labels:
+        app: ondemand
     spec:
       containers:
         - args:

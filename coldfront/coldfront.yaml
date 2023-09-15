@@ -4,10 +4,15 @@ metadata:
   name: coldfront
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: coldfront
   strategy:
     type: Recreate
   template:
     metadata:
+      labels:
+        app: coldfront
     spec:
       containers:
         - args:
